@@ -82,13 +82,19 @@ def copy_files(wdir, dir):
     path = os.path.normpath(dir)
     shutil.move(f"{wpath}\\pak01_dir.vpk", f"{path}\\Dota2SkinChanger")
     print("[+] Установил pak01_dir.vpk")
-    shutil.move(f"{wpath}\\gameinfo.gi", f"{path}\\game")
+    gameinfo_destination = f"{path}\\dota\\gameinfo.gi"
+    if os.path.exists(gameinfo_destination):
+        os.remove(gameinfo_destination)
+    shutil.move(f"{wpath}\\gameinfo.gi", f"{path}\\dota")
     print("[+] Заменил gameinfo.gi в файлах игры")
 
 def main():
+    """
+    Функция, инициализирующая все остальные.
+    """
     init()
 
-    os.system('title "Dota2VPKLoader | Created by https://t.me/staticsyscall / https://github.com/meth1337"')
+    os.system("title Dota2VPKLoader / Created by https://t.me/staticsyscall / https://github.com/meth1337")
 
     print(Fore.LIGHTRED_EX + """⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣶⣿⣿⣿⣷⣿⣿⣿⣿
 ⣿⣿⡿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢿⣿⣿⣿⣿⣿
@@ -102,6 +108,7 @@ def main():
 ⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠛⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀""" + Fore.RESET)
+    print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader")
 
 
     dir = input("[~] Введите путь к файлам игры Dota 2: ")
