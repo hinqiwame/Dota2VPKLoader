@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 Roman Frolov
+Copyright (c) 2023 meth1337 (https://github.com/meth1337 / cdkill@protonmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
