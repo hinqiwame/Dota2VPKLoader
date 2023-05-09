@@ -1,34 +1,40 @@
+import winreg
 import os
 import shutil
 from datetime import datetime
 from colorama import Fore, init
 import sys
 
-def check_dota(dir):
+def find_dota_directory():
     """
-    Проверяет наличие и валидность папки Dota 2.
+    Поиск пути к папке с файлами игры Dota 2 используя реестр Windows.
     """
-    print("[~] Проверка папки Dota 2...")
-    path = os.path.normpath(dir)
-    
-    if os.path.exists(path):
-        print("[+] Папка Dota 2 найдена! Проверка на валидность...")
-        ckpath = os.path.join(path, "core")
-        
-        if os.path.isdir(ckpath):
-            pass
-        else:
-            print("[!] Вы указали папку, в которой нету файлов игры. Пожалуйста, укажите валидную папку.")
-            input("[~] Нажмите Enter чтобы закрыть окно.")
-            os._exit(0)
-    else:
-        print("[!] Папка Dota 2 не найдена, проверьте, установлена ли Dota 2 на вашем ПК.")
-        input("[~] Нажмите Enter чтобы закрыть окно.")
-        os._exit(0)
+    try:
+        steam_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\Valve\\Steam")
+        steam_path = winreg.QueryValueEx(steam_key, "SteamPath")[0]
+        library_folders_path = os.path.join(steam_path, "steamapps", "libraryfolders.vdf")
 
-def check_vpk(wdir):
+        with open(library_folders_path, "r") as file:
+            content = file.read()
+
+        paths = [steam_path]
+        for line in content.split("\n"):
+            if "\"path\"" in line:
+                library_path = line.split("\"")[3]
+                paths.append(library_path)
+
+        for path in paths:
+            dota_path = os.path.join(path, "steamapps", "common", "dota 2 beta", "game")
+            if os.path.exists(dota_path):
+                print("[+] Папка Dota 2 найдена!")
+                dota_path_normalized = os.path.normpath(dota_path)
+                return dota_path_normalized
+    except:
+        return None
+
+def check_mod_files(wdir):
     """
-    Проверяет наличие VPK и gameinfo.gi файлов.
+    Проверка наличия VPK и gameinfo.gi файлов.
     """
     print("[~] Проверка VPK...")
     wpath_vpk = os.path.join(wdir, "pak01_dir.vpk")
@@ -49,44 +55,42 @@ def check_vpk(wdir):
         input("[~] Нажмите Enter чтобы закрыть окно.")
         os._exit(0)
 
-def work_dirs(dir):
+def process_mod_directories(dir):
     """
-    Работает с папками для мода.
+    Работа с папками для мода.
     """
-    print("[~] Работаю с папками для мода...")
-    path = os.path.normpath(dir)
+    print("[~] Работа с папками для мода...")
     
-    if os.path.exists(f"{path}\\Dota2SkinChanger"):
-        print("[~] Найдена существующая папка Dota2SkinChanger. Выполняю очистку...")
-        entries = os.listdir(f"{path}\\Dota2SkinChanger")
+    if os.path.exists(f"{dir}\\Dota2SkinChanger"):
+        print("[~] Найдена существующая папка Dota2SkinChanger. Производится очистка...")
+        entries = os.listdir(f"{dir}\\Dota2SkinChanger")
         
         for entry in entries:
-            entry_path = os.path.join(f"{path}\\Dota2SkinChanger", entry)
+            entry_path = os.path.join(f"{dir}\\Dota2SkinChanger", entry)
             
             if os.path.isfile(entry_path):
                 os.remove(entry_path)
-                print(f"[+] Удалил {entry_path}")
+                print(f"[+] {entry_path} удален")
             elif os.path.isdir(entry_path):
                 shutil.rmtree(entry_path)
-                print(f"[+] Удалил {entry_path}")
+                print(f"[+] {entry_path} удален")
     else:
-        os.makedirs(f"{path}\\Dota2SkinChanger", exist_ok=True)
-        print(f"[+] Создал папку Dota2SkinChanger в {path}.")
+        os.makedirs(f"{dir}\\Dota2SkinChanger", exist_ok=True)
+        print(f"[+] Папка Dota2SkinChanger создана в {dir}.")
 
-def copy_files(wdir, dir):
+def copy_mod_files(wdir, dir):
     """
-    Копирует файлы мода в соответствующие папки.
+    Перемещение файлов мода в соответствующие папки.
     """
-    print("[~] Работаю с файлами мода...")
+    print("[~] Работа с файлами мода...")
     wpath = os.path.normpath(wdir)
-    path = os.path.normpath(dir)
-    shutil.move(f"{wpath}\\pak01_dir.vpk", f"{path}\\Dota2SkinChanger")
-    print("[+] Установил pak01_dir.vpk")
-    gameinfo_destination = f"{path}\\dota\\gameinfo.gi"
+    shutil.move(f"{wpath}\\pak01_dir.vpk", f"{dir}\\Dota2SkinChanger")
+    print("[+] pak01_dir.vpk установлен")
+    gameinfo_destination = f"{dir}\\dota\\gameinfo.gi"
     if os.path.exists(gameinfo_destination):
         os.remove(gameinfo_destination)
-    shutil.move(f"{wpath}\\gameinfo.gi", f"{path}\\dota")
-    print("[+] Заменил gameinfo.gi в файлах игры")
+    shutil.move(f"{wpath}\\gameinfo.gi", f"{dir}\\dota")
+    print("[+] gameinfo.gi заменен в файлах игры")
 
 def main():
     """
@@ -108,17 +112,21 @@ def main():
 ⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠛⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀""" + Fore.RESET)
-    print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader")
+    
+    print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader\n")
 
+    dir = find_dota_directory()
+    if dir is None:
+        print("[!] Скрипту не удалось автоматически найти путь к файлам игры Dota 2. Пожалуйста, введите путь вручную.")
+        dir = input("[~] Введите путь к файлам игры Dota 2: ")
+    else:
+        pass
 
-    dir = input("[~] Введите путь к файлам игры Dota 2: ")
+    check_mod_files(os.getcwd())
+    process_mod_directories(dir)
+    copy_mod_files(os.getcwd(), dir)
 
-    check_dota(dir)
-    check_vpk(os.getcwd())
-    work_dirs(dir)
-    copy_files(os.getcwd(), dir)
-
-    print("[+] Установка мода успешно завершена!")
+    print("[+] Установка мода успешно завершена! Приятной игры <3")
     input("[~] Нажмите Enter чтобы закрыть окно.")
     os._exit(0)
 
