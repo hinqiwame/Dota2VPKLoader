@@ -2,7 +2,8 @@
 Скрипт, который упрощает установку и использование модов для игры Dota 2. Скрипт автоматически проверяет наличие и валидность папки игры, наличие необходимых файлов мода, создает соответствующие папки и копирует файлы мода в нужные директории.
 
 ## Требования
-- Установленная игра Dota 2.
+- Установленная игра Dota 2
+- Мод для установки.
 
 ## Использование
 1. Скачайте последнюю стабильную сборку скрипта [отсюда](https://github.com/meth1337/Dota2VPKLoader/releases/latest). (Файл: `Dota2VPKLoader-версия.zip`)
@@ -26,18 +27,21 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠛⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
 [*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader
-[~] Введите путь к файлам игры Dota 2:
-[~] Проверка папки Dota 2...
-[+] Папка Dota 2 найдена! Проверка на валидность...
+
+[+] Папка Dota 2 найдена!
 [~] Проверка VPK...
 [+] VPK найден!
 [+] Gameinfo найден!
-[~] Работаю с папками для мода...
-[+] Создал папку Dota2SkinChanger в C:\Coding\Python\Dota2VPKLoader\src\dist.
-[~] Работаю с файлами мода...
-[+] Установил pak01_dir.vpk
-[+] Заменил gameinfo.gi в файлах игры
-[+] Установка мода успешно завершена!
+[~] Работа с папками для мода...
+[~] Найдена существующая папка Dota2SkinChanger. Производится очистка...
+[+] c:\program files (x86)\steam\steamapps\common\dota 2 beta\game\Dota2SkinChanger\cfg удален
+[+] c:\program files (x86)\steam\steamapps\common\dota 2 beta\game\Dota2SkinChanger\pak01_dir.vpk удален
+[+] c:\program files (x86)\steam\steamapps\common\dota 2 beta\game\Dota2SkinChanger\rpt удален
+[+] c:\program files (x86)\steam\steamapps\common\dota 2 beta\game\Dota2SkinChanger\save удален
+[~] Работа с файлами мода...
+[+] pak01_dir.vpk установлен
+[+] gameinfo.gi заменен в файлах игры
+[+] Установка мода успешно завершена! Приятной игры <3
 [~] Нажмите Enter чтобы закрыть окно.
 ```
 
