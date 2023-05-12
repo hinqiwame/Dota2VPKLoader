@@ -8,13 +8,16 @@ import sys
 
 def get_latest_version(url: str) -> str:
     """
-    Минорная функция взаимодействующая с check_for_updates 
+    Минорная функция взаимодействующая с check_for_updates.
     """
     response = requests.get(url)
     if response.status_code == 200:
         return response.text.strip().strip('\n')
 
 def check_for_updates(current_version: str, version_url: str) -> None:
+    """
+    Проверка лоадера на наличие обновлений.
+    """
     latest_version = get_latest_version(version_url)
     if latest_version != current_version:
         print("[+] Для вашей сборки найдено новое обновление! Скачать его можно здесь: https://github.com/meth1337/Dota2VPKLoader/releases/latest")
@@ -99,12 +102,12 @@ def copy_mod_files(working_directory, dota_directory):
     """
     print("[~] Работа с файлами мода...")
     working_path = os.path.normpath(working_directory)
-    shutil.move(f"{working_path}\\pak01_dir.vpk", f"{dota_directory}\\Dota2SkinChanger")
+    shutil.copy(f"{working_path}\\pak01_dir.vpk", f"{dota_directory}\\Dota2SkinChanger")
     print("[+] pak01_dir.vpk установлен")
     gameinfo_destination = f"{dota_directory}\\dota\\gameinfo.gi"
     if os.path.exists(gameinfo_destination):
         os.remove(gameinfo_destination)
-    shutil.move(f"{working_path}\\gameinfo.gi", f"{dota_directory}\\dota")
+    shutil.copy(f"{working_path}\\gameinfo.gi", f"{dota_directory}\\dota")
     print("[+] gameinfo.gi заменен в файлах игры")
 
 def main():
@@ -130,7 +133,7 @@ def main():
     
     print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader\n")
 
-    # hooks
+    # Hooks
     check_for_updates("0.0.3", "https://raw.githubusercontent.com/meth1337/Dota2VPKLoader/main/version")
 
     dota_directory = find_dota_directory()
