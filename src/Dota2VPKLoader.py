@@ -1,9 +1,25 @@
+import requests
 import winreg
 import os
 import shutil
 from datetime import datetime
 from colorama import Fore, init
 import sys
+
+def get_latest_version(url: str) -> str:
+    """
+    Минорная функция взаимодействующая с check_for_updates 
+    """
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text.strip().strip('\n')
+
+def check_for_updates(current_version: str, version_url: str) -> None:
+    latest_version = get_latest_version(version_url)
+    if latest_version != current_version:
+        print("[+] Для вашей сборки найдено новое обновление! Скачать его можно здесь: https://github.com/meth1337/Dota2VPKLoader/releases/latest")
+    else:
+        print("[~] Для вашей сборки не найдено обновлений.")
 
 def find_dota_directory():
     """
@@ -26,18 +42,17 @@ def find_dota_directory():
         for path in paths:
             dota_path = os.path.join(path, "steamapps", "common", "dota 2 beta", "game")
             if os.path.exists(dota_path):
-                print("[+] Папка Dota 2 найдена!")
                 dota_path_normalized = os.path.normpath(dota_path)
                 return dota_path_normalized
     except:
         return None
 
-def check_mod_files(wdir):
+def check_mod_files(working_directory):
     """
     Проверка наличия VPK и gameinfo.gi файлов.
     """
     print("[~] Проверка VPK...")
-    wpath_vpk = os.path.join(wdir, "pak01_dir.vpk")
+    wpath_vpk = os.path.join(working_directory, "pak01_dir.vpk")
     
     if os.path.exists(wpath_vpk):
         print("[+] VPK найден!")
@@ -46,7 +61,7 @@ def check_mod_files(wdir):
         input("[~] Нажмите Enter чтобы закрыть окно.")
         os._exit(0)
         
-    wpath_gameinfo = os.path.join(wdir, "gameinfo.gi")
+    wpath_gameinfo = os.path.join(working_directory, "gameinfo.gi")
     
     if os.path.exists(wpath_gameinfo):
         print("[+] Gameinfo найден!")
@@ -55,18 +70,18 @@ def check_mod_files(wdir):
         input("[~] Нажмите Enter чтобы закрыть окно.")
         os._exit(0)
 
-def process_mod_directories(dir):
+def process_mod_directories(dota_directory):
     """
     Работа с папками для мода.
     """
     print("[~] Работа с папками для мода...")
     
-    if os.path.exists(f"{dir}\\Dota2SkinChanger"):
+    if os.path.exists(f"{dota_directory}\\Dota2SkinChanger"):
         print("[~] Найдена существующая папка Dota2SkinChanger. Производится очистка...")
-        entries = os.listdir(f"{dir}\\Dota2SkinChanger")
+        entries = os.listdir(f"{dota_directory}\\Dota2SkinChanger")
         
         for entry in entries:
-            entry_path = os.path.join(f"{dir}\\Dota2SkinChanger", entry)
+            entry_path = os.path.join(f"{dota_directory}\\Dota2SkinChanger", entry)
             
             if os.path.isfile(entry_path):
                 os.remove(entry_path)
@@ -76,20 +91,20 @@ def process_mod_directories(dir):
                 print(f"[+] {entry_path} удален")
     else:
         os.makedirs(f"{dir}\\Dota2SkinChanger", exist_ok=True)
-        print(f"[+] Папка Dota2SkinChanger создана в {dir}.")
+        print(f"[+] Папка Dota2SkinChanger создана в {dota_directory}.")
 
-def copy_mod_files(wdir, dir):
+def copy_mod_files(working_directory, dota_directory):
     """
     Перемещение файлов мода в соответствующие папки.
     """
     print("[~] Работа с файлами мода...")
-    wpath = os.path.normpath(wdir)
-    shutil.move(f"{wpath}\\pak01_dir.vpk", f"{dir}\\Dota2SkinChanger")
+    working_path = os.path.normpath(working_directory)
+    shutil.move(f"{working_path}\\pak01_dir.vpk", f"{dota_directory}\\Dota2SkinChanger")
     print("[+] pak01_dir.vpk установлен")
-    gameinfo_destination = f"{dir}\\dota\\gameinfo.gi"
+    gameinfo_destination = f"{dota_directory}\\dota\\gameinfo.gi"
     if os.path.exists(gameinfo_destination):
         os.remove(gameinfo_destination)
-    shutil.move(f"{wpath}\\gameinfo.gi", f"{dir}\\dota")
+    shutil.move(f"{working_path}\\gameinfo.gi", f"{dota_directory}\\dota")
     print("[+] gameinfo.gi заменен в файлах игры")
 
 def main():
@@ -115,16 +130,20 @@ def main():
     
     print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader\n")
 
-    dir = find_dota_directory()
-    if dir is None:
+    # hooks
+    check_for_updates("0.0.3", "https://raw.githubusercontent.com/meth1337/Dota2VPKLoader/main/version")
+
+    dota_directory = find_dota_directory()
+    if dota_directory is None:
         print("[!] Скрипту не удалось автоматически найти путь к файлам игры Dota 2. Пожалуйста, введите путь вручную.")
-        dir = input("[~] Введите путь к файлам игры Dota 2: ")
+        dota_directory = input("[~] Введите путь к файлам игры Dota 2: ")
     else:
+        print("[+] Папка Dota 2 найдена!")
         pass
 
     check_mod_files(os.getcwd())
-    process_mod_directories(dir)
-    copy_mod_files(os.getcwd(), dir)
+    process_mod_directories(dota_directory)
+    copy_mod_files(os.getcwd(), dota_directory)
 
     print("[+] Установка мода успешно завершена! Приятной игры <3")
     input("[~] Нажмите Enter чтобы закрыть окно.")
