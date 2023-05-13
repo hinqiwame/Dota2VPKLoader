@@ -6,7 +6,7 @@ from datetime import datetime
 from colorama import Fore, init
 import sys
 
-current_version = "0.0.3"  # Версия скрипта
+current_version = "0.0.4"  # Версия скрипта
 
 def get_latest_version(url: str) -> str:
     """
