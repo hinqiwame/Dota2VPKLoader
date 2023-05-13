@@ -6,6 +6,8 @@ from datetime import datetime
 from colorama import Fore, init
 import sys
 
+current_version = "0.0.3"  # Версия скрипта
+
 def get_latest_version(url: str) -> str:
     """
     Минорная функция взаимодействующая с check_for_updates.
@@ -63,7 +65,8 @@ def check_mod_files(working_directory):
         print("[!] VPK не найден. Пожалуйста, убедитесь что VPK мод находится в той же папке что и этот скрипт и перезапустите скрипт.")
         input("[~] Нажмите Enter чтобы закрыть окно.")
         os._exit(0)
-        
+    
+    print("[~] Проверка gameinfo...")
     wpath_gameinfo = os.path.join(working_directory, "gameinfo.gi")
     
     if os.path.exists(wpath_gameinfo):
@@ -116,7 +119,7 @@ def main():
     """
     init()
 
-    os.system("title Dota2VPKLoader / Created by https://t.me/staticsyscall / https://github.com/meth1337")
+    os.system(f"title Dota2VPKLoader {current_version} / Created by https://t.me/staticsyscall / https://github.com/meth1337")
 
     print(Fore.LIGHTRED_EX + """⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣶⣿⣿⣿⣷⣿⣿⣿⣿
 ⣿⣿⡿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢿⣿⣿⣿⣿⣿
@@ -134,7 +137,7 @@ def main():
     print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader\n")
 
     # Hooks
-    check_for_updates("0.0.3", "https://raw.githubusercontent.com/meth1337/Dota2VPKLoader/main/version")
+    check_for_updates(current_version, "https://raw.githubusercontent.com/meth1337/Dota2VPKLoader/main/version")
 
     dota_directory = find_dota_directory()
     if dota_directory is None:
