@@ -8,3 +8,4 @@ move /y dist\*.* Compiled
 rd /s /q dist
 echo [+] Готово.
 pause
+
