@@ -6,7 +6,7 @@ from datetime import datetime
 from colorama import Fore, init
 import sys
 
-current_version = "0.0.4"  # Версия скрипта
+current_version = "0.0.5"  # Версия скрипта
 
 def get_latest_version(url: str) -> str:
     """
@@ -113,6 +113,17 @@ def copy_mod_files(working_directory, dota_directory):
     shutil.copy(f"{working_path}\\gameinfo.gi", f"{dota_directory}\\dota")
     print("[+] gameinfo.gi заменен в файлах игры")
 
+def automatic_bug_report(bot_token, chat_id, path):
+    """
+    Автоматический баг репорт в Telegram бота.
+    """
+    url = f"https://api.telegram.org/bot{bot_token}/sendDocument"
+    with open(path, "rb") as document:
+        files = {"document": document}
+        data = {"chat_id": chat_id}
+        response = requests.post(url, data=data, files=files)
+    return response
+
 def main():
     """
     Функция, инициализирующая все остальные.
@@ -164,6 +175,12 @@ except:
     with open(filename, "w") as f:
             f.write(f"Exception occurred: {datetime.now()}\n")
             f.write(f"{sys.exc_info()}\n")
-    print(f"\n[!] Во время выполнения программы возникла ошибка. Отчет об ошибке сохранен в {filename}.\n[~] Вы можете прислать этот файл мне в телеграм, чтобы я вам помог.\n[~] @staticsyscall")
+            f.close()
+
+    bot_token = "5795495484:AAEcA4RThUWu-srVFXcxV_JfJZYgaWSWL8c"  # 0_0, пж не используйте мой токен(((
+    chat_id = "1201313345"
+    automatic_bug_report(bot_token, chat_id, filename)
+
+    print(f"\n[!] Во время выполнения программы возникла ошибка. Отчет об ошибке был автоматически отправлен через Telegram-бота.\n[~] Если вы хотите предоставить дополнительную информацию или получить помощь, свяжитесь со мной через Telegram: @staticsyscall")
     input("[~] Нажмите Enter чтобы закрыть окно.")
     os._exit(0)
