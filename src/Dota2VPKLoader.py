@@ -4,6 +4,7 @@ import os
 import shutil
 from datetime import datetime
 from colorama import Fore, init
+import importlib.util
 import sys
 
 current_version = "0.0.5"  # Версия скрипта
@@ -124,6 +125,35 @@ def automatic_bug_report(bot_token, chat_id, path):
         response = requests.post(url, data=data, files=files)
     return response
 
+def script_system(folder_path: str):
+    """
+    Простая реализация пользовательских скриптов.
+    """
+    if not os.path.exists(folder_path):
+        print(f"[~] Папка {folder_path} не найдена. Работа скрипта продолжается без пользовательских скриптов.")
+        return
+    
+    files = os.listdir(folder_path)
+    py_files = [file for file in files if file.endswith(".py")]
+
+    if not py_files:
+        print("[!] Не найдено пользовательских скриптов.")
+        return
+    
+    for py_file in py_files:
+        script_path = os.path.join(folder_path, py_file)
+        module_name = os.path.splitext(py_file)[0]
+
+        spec = importlib.util.spec_from_file_location(module_name, script_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+
+        if hasattr(module, "main"):
+            module.main()
+        else:
+            print(f"[!] Функция main не найдена в скрипте {py_file}")
+
 def main():
     """
     Функция, инициализирующая все остальные.
@@ -158,6 +188,7 @@ def main():
         print("[+] Папка Dota 2 найдена!")
         pass
 
+    script_system("Scripts")
     check_mod_files(os.getcwd())
     process_mod_directories(dota_directory)
     copy_mod_files(os.getcwd(), dota_directory)
@@ -177,9 +208,7 @@ except:
             f.write(f"{sys.exc_info()}\n")
             f.close()
 
-    bot_token = "5795495484:AAEcA4RThUWu-srVFXcxV_JfJZYgaWSWL8c"  # 0_0, пж не используйте мой токен(((
-    chat_id = "1201313345"
-    automatic_bug_report(bot_token, chat_id, filename)
+    automatic_bug_report("5795495484:AAEcA4RThUWu-srVFXcxV_JfJZYgaWSWL8c", "1201313345", filename)
 
     print(f"\n[!] Во время выполнения программы возникла ошибка. Отчет об ошибке был автоматически отправлен через Telegram-бота.\n[~] Если вы хотите предоставить дополнительную информацию или получить помощь, свяжитесь со мной через Telegram: @staticsyscall")
     input("[~] Нажмите Enter чтобы закрыть окно.")
