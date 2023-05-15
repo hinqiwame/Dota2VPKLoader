@@ -3,7 +3,7 @@
     <img src="https://img.shields.io/github/downloads/meth1337/Dota2VPKLoader/total">
     <img src="https://img.shields.io/github/license/meth1337/Dota2VPKLoader">
     <img src="https://img.shields.io/github/commit-activity/m/meth1337/Dota2VPKLoader">
-  </div>
+</div><br>
 Скрипт для автоматизации установки и использования модов для игры Dota 2. Скрипт автоматически определяет путь к папке с файлами игры Dota 2, проверяет наличие файлов мода (`pak01_dir.vpk` и `gameinfo.gi`), создает необходимые папки и копирует файлы мода в соответствующие директории. Для поиска папки с файлами игры используется реестр Windows.
 
 ## Требования
