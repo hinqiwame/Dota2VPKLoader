@@ -125,7 +125,7 @@ def automatic_bug_report(bot_token, chat_id, path):
         response = requests.post(url, data=data, files=files)
     return response
 
-def script_system(folder_path: str):
+def initialize_user_scripts(folder_path: str):
     """
     Простая реализация пользовательских скриптов.
     """
@@ -188,7 +188,7 @@ def main():
         print("[+] Папка Dota 2 найдена!")
         pass
 
-    script_system("Scripts")
+    initialize_user_scripts("Scripts")
     check_mod_files(os.getcwd())
     process_mod_directories(dota_directory)
     copy_mod_files(os.getcwd(), dota_directory)
