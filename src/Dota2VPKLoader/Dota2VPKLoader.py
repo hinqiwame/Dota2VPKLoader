@@ -9,6 +9,15 @@ import sys
 
 current_version = "0.0.6"  # Версия скрипта
 
+def positive_log(text):
+    print(f"[+] {text}")
+
+def negative_log(text):
+    print(f"[!] {text}")
+
+def neutral_log(text):
+    print(f"[~] {text}")
+
 def get_latest_version(url: str) -> str:
     """
     Минорная функция взаимодействующая с check_for_updates.
@@ -23,9 +32,9 @@ def check_for_updates(current_version: str, version_url: str) -> None:
     """
     latest_version = get_latest_version(version_url)
     if latest_version != current_version:
-        print("[+] Для вашей сборки найдено новое обновление! Скачать его можно здесь: https://github.com/meth1337/Dota2VPKLoader/releases/latest")
+        positive_log("Для вашей сборки найдено новое обновление! Скачать его можно здесь: https://github.com/meth1337/Dota2VPKLoader/releases/latest")
     else:
-        print("[~] Для вашей сборки не найдено обновлений.")
+        neutral_log("Для вашей сборки не найдено обновлений.")
 
 def find_dota_directory():
     """
@@ -57,23 +66,23 @@ def check_mod_files(working_directory):
     """
     Проверка наличия VPK и gameinfo.gi файлов.
     """
-    print("[~] Проверка VPK...")
+    neutral_log("Проверка VPK...")
     wpath_vpk = os.path.join(working_directory, "pak01_dir.vpk")
     
     if os.path.exists(wpath_vpk):
-        print("[+] VPK найден!")
+        positive_log("VPK найден!")
     else:
-        print("[!] VPK не найден. Пожалуйста, убедитесь что VPK мод находится в той же папке что и этот скрипт и перезапустите скрипт.")
+        negative_log("VPK не найден. Пожалуйста, убедитесь что VPK мод находится в той же папке что и этот скрипт и перезапустите скрипт.")
         input("[~] Нажмите Enter чтобы закрыть окно.")
         os._exit(0)
     
-    print("[~] Проверка gameinfo...")
+    neutral_log("Проверка gameinfo...")
     wpath_gameinfo = os.path.join(working_directory, "gameinfo.gi")
     
     if os.path.exists(wpath_gameinfo):
-        print("[+] Gameinfo найден!")
+        positive_log("Gameinfo найден!")
     else:
-        print("[!] Gameinfo не найден. Пожалуйста, убедитесь что gameinfo.gi находится в той же папке что и этот скрипт и перезапустите скрипт.")
+        negative_log("Gameinfo не найден. Пожалуйста, убедитесь что gameinfo.gi находится в той же папке что и этот скрипт и перезапустите скрипт.")
         input("[~] Нажмите Enter чтобы закрыть окно.")
         os._exit(0)
 
@@ -81,10 +90,10 @@ def process_mod_directories(dota_directory):
     """
     Работа с папками для мода.
     """
-    print("[~] Работа с папками для мода...")
+    neutral_log("Работа с папками для мода...")
     
     if os.path.exists(f"{dota_directory}\\Dota2SkinChanger"):
-        print("[~] Найдена существующая папка Dota2SkinChanger. Производится очистка...")
+        neutral_log("Найдена существующая папка Dota2SkinChanger. Производится очистка...")
         entries = os.listdir(f"{dota_directory}\\Dota2SkinChanger")
         
         for entry in entries:
@@ -98,21 +107,21 @@ def process_mod_directories(dota_directory):
                 print(f"[+] {entry_path} удален")
     else:
         os.makedirs(f"{dir}\\Dota2SkinChanger", exist_ok=True)
-        print(f"[+] Папка Dota2SkinChanger создана в {dota_directory}.")
+        positive_log(f"Папка Dota2SkinChanger создана в {dota_directory}.")
 
 def copy_mod_files(working_directory, dota_directory):
     """
     Перемещение файлов мода в соответствующие папки.
     """
-    print("[~] Работа с файлами мода...")
+    neutral_log("Работа с файлами мода...")
     working_path = os.path.normpath(working_directory)
     shutil.copy(f"{working_path}\\pak01_dir.vpk", f"{dota_directory}\\Dota2SkinChanger")
-    print("[+] pak01_dir.vpk установлен")
+    positive_log("pak01_dir.vpk установлен")
     gameinfo_destination = f"{dota_directory}\\dota\\gameinfo.gi"
     if os.path.exists(gameinfo_destination):
         os.remove(gameinfo_destination)
     shutil.copy(f"{working_path}\\gameinfo.gi", f"{dota_directory}\\dota")
-    print("[+] gameinfo.gi заменен в файлах игры")
+    positive_log("gameinfo.gi заменен в файлах игры")
 
 def automatic_bug_report(bot_token, chat_id, path):
     """
@@ -138,7 +147,7 @@ def initialize_user_scripts(folder_path: str):
     py_files = [file for file in files if file.endswith(".py")]
 
     if not py_files:
-        print(f"[!] В папке {folder_path} не найдено пользовательских скриптов.")
+        negative_log(f"В папке {folder_path} не найдено пользовательских скриптов.")
         return
     
     for py_file in py_files:
@@ -153,7 +162,7 @@ def initialize_user_scripts(folder_path: str):
         if hasattr(module, "main"):
             module.main()
         else:
-            print(f"[!] Функция main не найдена в скрипте {py_file}")
+            negative_log(f"Функция main не найдена в скрипте {py_file}")
 
 def main():
     """
@@ -183,10 +192,10 @@ def main():
 
     dota_directory = find_dota_directory()
     if dota_directory is None:
-        print("[!] Скрипту не удалось автоматически найти путь к файлам игры Dota 2. Пожалуйста, введите путь вручную.")
+        negative_log("Скрипту не удалось автоматически найти путь к файлам игры Dota 2. Пожалуйста, введите путь вручную.")
         dota_directory = input("[~] Введите путь к файлам игры Dota 2: ")
     else:
-        print("[+] Папка Dota 2 найдена!")
+        positive_log("Папка Dota 2 найдена!")
         pass
 
     initialize_user_scripts("Scripts")
@@ -194,7 +203,7 @@ def main():
     process_mod_directories(dota_directory)
     copy_mod_files(os.getcwd(), dota_directory)
 
-    print("[+] Установка мода успешно завершена! Приятной игры <3")
+    positive_log("Установка мода успешно завершена! Приятной игры <3")
     input("[~] Нажмите Enter чтобы закрыть окно.")
     os._exit(0)
 
@@ -211,6 +220,7 @@ except:
 
     automatic_bug_report("5795495484:AAEcA4RThUWu-srVFXcxV_JfJZYgaWSWL8c", "1201313345", filename)
 
-    print(f"\n[!] Во время выполнения программы возникла ошибка. Отчет об ошибке был автоматически отправлен через Telegram-бота.\n[~] Если вы хотите предоставить дополнительную информацию или получить помощь, свяжитесь со мной через Telegram: @staticsyscall")
+    negative_log("Во время выполнения программы возникла ошибка. Отчет об ошибке был автоматически отправлен через Telegram-бота.")
+    neutral_log("Если вы хотите предоставить дополнительную информацию или получить помощь, свяжитесь со мной через Telegram: @staticsyscall")
     input("[~] Нажмите Enter чтобы закрыть окно.")
     os._exit(0)
