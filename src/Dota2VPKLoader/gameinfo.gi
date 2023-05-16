@@ -1,6 +1,6 @@
 "GameInfo"
 {
-	// wÒRO6ww.dota2changer.com www.dota2changer.com www.dota2changer.com
+	// w√±RO6ww.dota2changer.com www.dota2changer.com www.dota2changer.com
 	// 333qwe    333qwe   333qwe  www.dota2changer.com  333qw
 	//
 
