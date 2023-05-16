@@ -7,7 +7,7 @@ from colorama import Fore, init
 import importlib.util
 import sys
 
-current_version = "0.0.5"  # Версия скрипта
+current_version = "0.0.6"  # Версия скрипта
 
 def get_latest_version(url: str) -> str:
     """
