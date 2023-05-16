@@ -130,14 +130,15 @@ def initialize_user_scripts(folder_path: str):
     Простая реализация пользовательских скриптов.
     """
     if not os.path.exists(folder_path):
-        print(f"[~] Папка {folder_path} не найдена. Работа скрипта продолжается без пользовательских скриптов.")
+        #print(f"[~] Папка {folder_path} не найдена. Работа скрипта продолжается без пользовательских скриптов.")
+        pass
         return
     
     files = os.listdir(folder_path)
     py_files = [file for file in files if file.endswith(".py")]
 
     if not py_files:
-        print("[!] Не найдено пользовательских скриптов.")
+        print(f"[!] В папке {folder_path} не найдено пользовательских скриптов.")
         return
     
     for py_file in py_files:
