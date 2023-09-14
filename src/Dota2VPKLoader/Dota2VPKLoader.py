@@ -32,7 +32,7 @@ def check_for_updates(current_version: str, version_url: str) -> None:
     """
     latest_version = get_latest_version(version_url)
     if latest_version != current_version:
-        positive_log("Для вашей сборки найдено новое обновление! Скачать его можно здесь: https://github.com/meth1337/Dota2VPKLoader/releases/latest")
+        positive_log("Для вашей сборки найдено новое обновление! Скачать его можно здесь: https://github.com/qqqwwqeeqqwe/Dota2VPKLoader/releases/latest")
     else:
         neutral_log("Для вашей сборки не найдено обновлений.")
 
@@ -170,7 +170,7 @@ def main():
     """
     init()
 
-    os.system(f"title Dota2VPKLoader {current_version} / Created by https://t.me/staticsyscall / https://github.com/meth1337")
+    os.system(f"title Dota2VPKLoader {current_version} / Created by https://t.me/qqqwwqwwwwwe / https://github.com/qqqwwqeeqqwe")
 
     print(Fore.LIGHTRED_EX + """⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣶⣿⣿⣿⣷⣿⣿⣿⣿
 ⣿⣿⡿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢿⣿⣿⣿⣿⣿
@@ -185,10 +185,10 @@ def main():
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠛⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀""" + Fore.RESET)
     
-    print("\n[*] Инструкция по использованию: https://github.com/meth1337/Dota2VPKLoader\n")
+    print("\n[*] Инструкция по использованию: https://github.com/qqqwwqeeqqwe/Dota2VPKLoader\n")
 
     # Hooks
-    check_for_updates(current_version, "https://raw.githubusercontent.com/meth1337/Dota2VPKLoader/main/version")
+    check_for_updates(current_version, "https://raw.githubusercontent.com/qqqwwqeeqqwe/Dota2VPKLoader/main/version")
 
     dota_directory = find_dota_directory()
     if dota_directory is None:
