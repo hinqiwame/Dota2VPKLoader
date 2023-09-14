@@ -7,7 +7,7 @@ from colorama import Fore, init
 import importlib.util
 import sys
 
-current_version = "0.0.6"  # Версия скрипта
+current_version = "0.0.7"  # Версия скрипта
 
 def positive_log(text):
     print(f"[+] {text}")
@@ -221,6 +221,5 @@ except:
     automatic_bug_report("5795495484:AAEcA4RThUWu-srVFXcxV_JfJZYgaWSWL8c", "1201313345", filename)
 
     negative_log("Во время выполнения программы возникла ошибка. Отчет об ошибке был автоматически отправлен через Telegram-бота.")
-    neutral_log("Если вы хотите предоставить дополнительную информацию или получить помощь, свяжитесь со мной через Telegram: @staticsyscall")
     input("[~] Нажмите Enter чтобы закрыть окно.")
     os._exit(0)
