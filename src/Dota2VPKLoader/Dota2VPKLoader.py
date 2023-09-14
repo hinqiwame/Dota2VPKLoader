@@ -118,9 +118,13 @@ def copy_mod_files(working_directory, dota_directory):
     shutil.copy(f"{working_path}\\pak01_dir.vpk", f"{dota_directory}\\Dota2SkinChanger")
     positive_log("pak01_dir.vpk установлен")
     gameinfo_destination = f"{dota_directory}\\dota\\gameinfo.gi"
+    gameinfo_branchspecific_destination = f"{dota_directory}\\dota\\gameinfo_branchspecific.gi"
     if os.path.exists(gameinfo_destination):
         os.remove(gameinfo_destination)
+    if os.path.exists(gameinfo_branchspecific_destination):
+        os.remove(gameinfo_branchspecific_destination)
     shutil.copy(f"{working_path}\\gameinfo.gi", f"{dota_directory}\\dota")
+    shutil.copy(f"{working_path}\\gameinfo_branchspecific.gi", f"{dota_directory}\\dota")
     positive_log("gameinfo.gi заменен в файлах игры")
 
 def automatic_bug_report(bot_token, chat_id, path):
